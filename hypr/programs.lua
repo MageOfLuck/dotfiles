@@ -19,6 +19,7 @@ hl.on("hyprland.start", function ()
   hl.exec_cmd("discord")
   hl.exec_cmd("steam")
   hl.exec_cmd("gtk-launch helium")
+  hl.exec_cmd("overlayed")
 end)
 
 -------------------------------
@@ -33,7 +34,7 @@ hl.env("WLR_DRM_NO_ATOMIC", "0")
 --hl.env("__NV_PRIME_RENDER_OFFLOAD", "1")
 hl.env("MOZ_DISABLE_RDD_SANDBOX", "1")
 --hl.env("XDG_DATA_DIRS", os.getenv("HOME") .. "/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share")
-hl.env("AQ_DRM_DEVICES", "/dev/dri/rx9070xt")
+--hl.env("AQ_DRM_DEVICES", "/dev/dri/rx9070xt")
 
 hl.env("XCURSOR_THEME", "DJ-FOX-C")
 hl.env("XCURSOR_SIZE", "12")

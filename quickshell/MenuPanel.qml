@@ -43,8 +43,8 @@ PanelWindow {
                 network: 620,
                 notifications: 620,
                 clock: 530,
-                dashboard: 490,
-                media: 530
+                dashboard: 530,
+                media: 550
             })
         // Extend menus downward, but always stop above the monitor's bottom edge.
         height: Math.max(80, Math.min(panel.height - y - 12, menuHeights[ControlState.menu] || 520))

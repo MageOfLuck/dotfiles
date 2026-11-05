@@ -13,7 +13,7 @@ config.color_scheme_dirs = {
 }
 config.color_scheme = 'Amethyst Tide'
 -- Window
-config.window_background_opacity = 0.9
+config.window_background_opacity = 0.4
 config.window_padding = {
   left = 10,
   right = 10,

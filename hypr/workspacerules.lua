@@ -31,6 +31,82 @@ hl.window_rule({
     no_focus = true,
 })
 
+hl.window_rule({
+    name = "easy-effects",
+    match = {
+        class = "com.github.wwmm.easyeffects",
+    },
+    opacity = "1.0 override 0.65 override 1.0 override",
+    no_blur = false,
+})
+
+hl.window_rule({
+    name = "discord",
+    match = {
+        class = "discord",
+    },
+    opacity = "1.0 override 0.67 override 1.0 override",
+    no_blur = false,
+})
+
+hl.window_rule({
+    name = "steam",
+    match = {
+        class = "steam",
+    },
+    opacity = "1.0 override 0.67 override 1.0 override",
+    no_blur = false,
+})
+
+hl.window_rule({
+    name = "dolphin",
+    match = {
+        class = "org.kde.dolphin",
+    },
+    opacity = "1.0 override 0.67 override 1.0 override",
+    no_blur = false,
+})
+
+hl.window_rule({
+    name = "dolphin",
+    match = {
+        title = "org.kde.dolphin",
+    },
+    opacity = "1.0 override 0.67 override 1.0 override",
+    no_blur = false,
+})
+
+-- Overlayed: Discord voice chat overlay
+hl.window_rule({
+    name = "overlayed-main",
+    match = {
+        initial_title = "^Overlayed - Main$",
+    },
+
+    float = true,
+    pin = true,
+
+    -- Position on your primary monitor
+    monitor = "DP-2",
+
+    -- Compact overlay size
+    size = {250,300},
+
+    -- Top-right corner, 16px margin
+    move = {
+        "(monitor_w-window_w-6)",
+        "50",
+    },
+
+    -- Avoid Hyprland visual effects
+    no_blur = true,
+    no_shadow = true,
+    no_anim = true,
+    border_size = 0,
+
+    -- Preserve application transparency
+    opacity = "1.0 override 1.0 override 1.0 override",
+})
 -------------------------
 ---- WORKSPACE GROUPS ----
 -------------------------

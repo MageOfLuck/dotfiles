@@ -16,9 +16,11 @@ hl.bind(secMod .. " + S", hl.dsp.exec_cmd("steam"))
 hl.bind(secMod .. " + E", hl.dsp.exec_cmd("easyeffects"))
 hl.bind(mainMod .. " + Escape", hl.dsp.exec_cmd("lact"))
 
+-- Overlayed: other option toggle-pin
+hl.bind("XF86Launch5", hl.dsp.exec_cmd("python3 ~/.local/bin/overlayed-control settings"))
+
 --(found using wev in case I need this later)
 hl.bind("XF86Tools", hl.dsp.exec_cmd("/usr/bin/euro-office-euro-office"))
-hl.bind("XF86Launch5", hl.dsp.exec_cmd("hyprctl reload"))
 hl.bind("XF86Launch6", hl.dsp.exec_cmd('qs ipc call control toggleReserve'))
 
 --window related commands

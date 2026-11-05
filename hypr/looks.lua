@@ -19,13 +19,13 @@ hl.layer_rule({
 
 hl.config({
     general = {
-        gaps_in  = 4,
+        gaps_in  = 2,
         gaps_out = { top = 6, right = 6, bottom = 6, left = 6 },
 
-        border_size = 3,
+        border_size = 1,
 
         col = {
-            active_border   = { colors = {"#ffffff", "#ffffff"}, angle = 45 },
+            active_border   = { colors = {"#ffffff", "#20063d"}, angle = 45 },
             inactive_border = "#000000",
         },
 
@@ -46,10 +46,13 @@ hl.config({
     decoration = {
         rounding       = 10,
         rounding_power = 2,
+        border_part_of_window = false,
 
         -- Change transparency of focused and unfocused windows
         active_opacity   = 1.0,
-        inactive_opacity = 0.83,
+        inactive_opacity = 1.0,
+        dim_inactive = true,
+        dim_strength = 0.05,
 
         shadow = {
             enabled      = true,
@@ -57,36 +60,35 @@ hl.config({
             render_power = 3,
             color        = 0xee1a1a1a,
         },
+
+        blur = {
+            enabled = true,
+            brightness = 1.2,
+            contrast = 1.0,
+            size = 12,
+            variant = "acrylic",
+            vibrancy = 0.9,
+            vibrancy_darkness = 0.2,
+            proportional = true,
+            --noise = 0.0,
+            passes = 4,
+
+            acrylic = {
+                aberration = 0.25,
+                bulb = 70,
+                clarity = 0.1,
+                refraction = 34,
+                tint = '#1e1358b2',
+            },
+        },
+
+    },
+    
+    render = {
+        cm_auto_hdr = 0,
     },
 
     animations = {
         enabled = true,
     },
 })
-
--- Hyprglass configuration
-    if hl.plugin.hyprglass then
-        local hg = hl.plugin.hyprglass
-
-        hg.config({
-            enabled = true,
-
-            default_theme = "dark",
-            --default_preset = "pomme",
-
-            -- Color corrections
-            dark = {
-                brightness   = 1.0,
-                contrast     = 1.4,
-                saturation   = 1.40,
-                vibrancy     = 1.0,
-                adaptive_dim = 0.05,
-            },
-
-            -- Liquid Glass effects
-            refraction_strength = 0.45,
-            chromatic_aberration = 0.6,
-            lens_distortion      = 0.8,
-            edge_thickness       = 0.05,
-        })
-    end
