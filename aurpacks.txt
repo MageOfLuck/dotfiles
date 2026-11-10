@@ -1,10 +1,13 @@
 ashell-bin
-euro-office-bin
 libcava
+linux-wallpaperengine-git
 lorien-bin
 minecraft-launcher
+overlayed-git
+papirus-folders-git
 processing
 qt6-m3shapes-git
+sigma-file-manager-bin
 themechanger-git
 ttf-rubik-vf
 vicinae-bin

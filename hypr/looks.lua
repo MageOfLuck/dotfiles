@@ -38,13 +38,14 @@ hl.config({
         layout = "dwindle",
     },
 
+    --preferences for how windows are tiled
     dwindle = {
         preserve_split = true,
         --precise_mouse_move = true,
     },
 
     decoration = {
-        rounding       = 10,
+        rounding       = 12,
         rounding_power = 2,
         border_part_of_window = false,
 
@@ -63,20 +64,19 @@ hl.config({
 
         blur = {
             enabled = true,
-            brightness = 1.2,
-            contrast = 1.0,
-            size = 12,
+            brightness = 0.9,
+            contrast = 1.8,
+            size = 11,
             variant = "acrylic",
             vibrancy = 0.9,
-            vibrancy_darkness = 0.2,
+            vibrancy_darkness = 0.4,
             proportional = true,
-            --noise = 0.0,
-            passes = 4,
+            passes = 3,
 
             acrylic = {
                 aberration = 0.25,
-                bulb = 70,
-                clarity = 0.1,
+                bulb = 15,
+                clarity = 0.01,
                 refraction = 34,
                 tint = '#1e1358b2',
             },
@@ -85,9 +85,10 @@ hl.config({
     },
     
     render = {
-        cm_auto_hdr = 0,
+        cm_auto_hdr = 0, --turns off HDR for fullscreen; looks bad ngl
     },
 
+    --enables the animations lua module
     animations = {
         enabled = true,
     },

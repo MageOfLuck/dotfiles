@@ -32,45 +32,9 @@ hl.window_rule({
 })
 
 hl.window_rule({
-    name = "easy-effects",
+    name = "Opacity-Settings",
     match = {
-        class = "com.github.wwmm.easyeffects",
-    },
-    opacity = "1.0 override 0.65 override 1.0 override",
-    no_blur = false,
-})
-
-hl.window_rule({
-    name = "discord",
-    match = {
-        class = "discord",
-    },
-    opacity = "1.0 override 0.67 override 1.0 override",
-    no_blur = false,
-})
-
-hl.window_rule({
-    name = "steam",
-    match = {
-        class = "steam",
-    },
-    opacity = "1.0 override 0.67 override 1.0 override",
-    no_blur = false,
-})
-
-hl.window_rule({
-    name = "dolphin",
-    match = {
-        class = "org.kde.dolphin",
-    },
-    opacity = "1.0 override 0.67 override 1.0 override",
-    no_blur = false,
-})
-
-hl.window_rule({
-    name = "dolphin",
-    match = {
-        title = "org.kde.dolphin",
+        class = "com.github.wwmm.easyeffects|discord|steam",
     },
     opacity = "1.0 override 0.67 override 1.0 override",
     no_blur = false,
@@ -87,7 +51,7 @@ hl.window_rule({
     pin = true,
 
     -- Position on your primary monitor
-    monitor = "DP-2",
+    monitor = "DP-1",
 
     -- Compact overlay size
     size = {250,300},
@@ -111,18 +75,21 @@ hl.window_rule({
 ---- WORKSPACE GROUPS ----
 -------------------------
 
-hl.workspace_rule({ workspace = "1", monitor = "DP-2",     persistent = true })
-hl.workspace_rule({ workspace = "2", monitor = "DP-2",     persistent = true })
-hl.workspace_rule({ workspace = "3", monitor = "DP-2",     persistent = true })
+--main monitor
+hl.workspace_rule({ workspace = "1", monitor = "DP-1",     persistent = true })
+hl.workspace_rule({ workspace = "2", monitor = "DP-1",     persistent = true })
+hl.workspace_rule({ workspace = "3", monitor = "DP-1",     persistent = true })
 
+--side monitors
 hl.workspace_rule({ workspace = "4", monitor = "HDMI-A-1", persistent = true })
 hl.workspace_rule({ workspace = "5", monitor = "HDMI-A-1", persistent = true })
 hl.workspace_rule({ workspace = "6", monitor = "HDMI-A-1", persistent = true })
 
-hl.workspace_rule({ workspace = "7", monitor = "DP-1",     persistent = true })
-hl.workspace_rule({ workspace = "8", monitor = "DP-1",     persistent = true })
-hl.workspace_rule({ workspace = "9", monitor = "DP-1",     persistent = true })
+hl.workspace_rule({ workspace = "7", monitor = "DP-2",     persistent = true })
+hl.workspace_rule({ workspace = "8", monitor = "DP-2",     persistent = true })
+hl.workspace_rule({ workspace = "9", monitor = "DP-2",     persistent = true })
 
+--Huion Tablet
 hl.workspace_rule({workspace = "10", monitor = "HDMI-A-3"})
 
 -- Layer rules also return a handle.

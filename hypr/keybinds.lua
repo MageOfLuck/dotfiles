@@ -8,14 +8,15 @@ local thirdMod = "CTRL"
 
 -- binds for applications
 hl.bind(mainMod .. " + T", hl.dsp.exec_cmd("wezterm"))
-hl.bind(mainMod .. " + E", hl.dsp.exec_cmd("dolphin"))
+hl.bind(mainMod .. " + E", hl.dsp.exec_cmd("sigma-file-manager"))
 hl.bind(secMod .. " + V", hl.dsp.exec_cmd("vscodium"))
 hl.bind(secMod .. " + B", hl.dsp.exec_cmd("gtk-launch helium"))
 hl.bind(secMod .. " + D", hl.dsp.exec_cmd("discord"))
 hl.bind(secMod .. " + S", hl.dsp.exec_cmd("steam"))
 hl.bind(secMod .. " + E", hl.dsp.exec_cmd("easyeffects"))
-hl.bind(mainMod .. " + Escape", hl.dsp.exec_cmd("lact"))
+hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd("vicinae toggle"))
 
+hl.bind(mainMod .. " + Escape", hl.dsp.exec_cmd("lact"))
 -- Overlayed: other option toggle-pin
 hl.bind("XF86Launch5", hl.dsp.exec_cmd("python3 ~/.local/bin/overlayed-control settings"))
 
@@ -34,6 +35,11 @@ hl.bind(thirdMod .. " + " .. secMod .. " + right", hl.dsp.window.move({ window, 
 hl.bind(thirdMod .. " + " .. secMod .. " + up",    hl.dsp.window.move({ window, direction = "up", group_aware = true}))
 hl.bind(thirdMod .. " + " .. secMod .. " + down",  hl.dsp.window.move({ window, direction = "down", group_aware = true}))
 
+hl.bind(mainMod .. " + left",  hl.dsp.focus({ direction = "left" }))
+hl.bind(mainMod .. " + right", hl.dsp.focus({ direction = "right" }))
+hl.bind(mainMod .. " + up",    hl.dsp.focus({ direction = "up" }))
+hl.bind(mainMod .. " + down",  hl.dsp.focus({ direction = "down" }))
+
 -- Side-button drag/resize
 hl.bind("mouse:275", hl.dsp.window.drag(),   { mouse = true })
 hl.bind("mouse:276", hl.dsp.window.resize(), { mouse = true })
@@ -41,19 +47,12 @@ hl.bind("mouse:276", hl.dsp.window.resize(), { mouse = true })
 --useful commands
 hl.bind(mainMod .. " + M", hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'"))
 hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
-hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd("vicinae toggle"), { description = "Toggle Vicinae launcher" })
-hl.bind(mainMod .. " + Shift_l", hl.dsp.layout("togglesplit"))    -- dwindle only
+hl.bind(mainMod .. " + Shift_l", hl.dsp.layout("togglesplit"))  -- dwindle only
 hl.bind("Print", hl.dsp.exec_cmd("grim -g \"$(slurp)\" - | swappy -f -"))
 
 --brightness commands
 hl.bind("SHIFT + F1", hl.dsp.exec_cmd("brightness set 1"))
 hl.bind("SHIFT + F2", hl.dsp.exec_cmd("brightness set 100"))
-
--- Move focus with mainMod + arrow keys
-hl.bind(mainMod .. " + left",  hl.dsp.focus({ direction = "left" }))
-hl.bind(mainMod .. " + right", hl.dsp.focus({ direction = "right" }))
-hl.bind(mainMod .. " + up",    hl.dsp.focus({ direction = "up" }))
-hl.bind(mainMod .. " + down",  hl.dsp.focus({ direction = "down" }))
 
 --loop for moving all desktops to new section
 for i = 1, 3 do

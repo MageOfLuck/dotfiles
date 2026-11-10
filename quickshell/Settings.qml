@@ -21,7 +21,7 @@ QtObject {
     property int revealDelay: 80
     property int hideDelay: 200
     property int barHeight: 42
-    property string popupMonitor: "DP-2"
+    property string popupMonitor: "DP-1"
     property int menuWidth: 430
     property string logoutCommand: "command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'"
     property string lockCommand: "hyprlock"
