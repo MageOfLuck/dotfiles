@@ -8,8 +8,16 @@ MenuView {
     implicitHeight: body.implicitHeight
     clip: true
     property var adapter: Bluetooth.defaultAdapter
-    readonly property var devices: adapter ? adapter.devices.values.slice().sort((a, b) => Number(b.connected) - Number(a.connected) || Number(b.paired) - Number(a.paired) || (a.name || "").localeCompare(b.name || "")) : []
-    readonly property var filteredDevices: devices.filter(d => ((d.name || "") + " " + (d.address || "")).toLowerCase().indexOf(filter.text.trim().toLowerCase()) >= 0)
+    function friendlyName(device) {
+        for (const value of [device.name, device.deviceName]) {
+            const name = (value || "").trim()
+            if (name && !/^(?:[0-9a-f]{2}[:-]){5}[0-9a-f]{2}$/i.test(name))
+                return name
+        }
+        return ""
+    }
+    readonly property var devices: adapter ? adapter.devices.values.slice().sort((a, b) => Number(b.connected) - Number(a.connected) || Number(b.paired) - Number(a.paired) || friendlyName(a).localeCompare(friendlyName(b))) : []
+    readonly property var filteredDevices: devices.filter(d => (friendlyName(d) + " " + (d.address || "")).toLowerCase().indexOf(filter.text.trim().toLowerCase()) >= 0)
     onAdapterChanged: if (adapter && !adapter.enabled && adapter.discovering) adapter.discovering = false
     Component.onDestruction: if (adapter) adapter.discovering = false
     ColumnLayout {
@@ -72,7 +80,7 @@ MenuView {
                         spacing: 4
                         Label {
                             font.family: Settings.fontFamily
-                            text: deviceCard.modelData.name || deviceCard.modelData.address || "Unknown device"
+                            text: view.friendlyName(deviceCard.modelData) || "Unnamed device"
                             font.bold: true
                             color: Settings.foreground
                             Layout.fillWidth: true
@@ -82,7 +90,7 @@ MenuView {
                             font.family: Settings.fontFamily
                             color: Settings.muted
                             font.pixelSize: 11
-                            text: (deviceCard.modelData.connected ? "Connected" : deviceCard.modelData.pairing ? "Pairing…" : deviceCard.modelData.paired ? "Saved" : "Nearby") + (deviceCard.modelData.batteryAvailable ? " · " + Math.round(deviceCard.modelData.battery * 100) + "% battery" : "")
+                            text: (deviceCard.modelData.connected ? "Connected" : deviceCard.modelData.pairing ? "Pairing…" : deviceCard.modelData.paired ? "Saved" : "Nearby") + (!view.friendlyName(deviceCard.modelData) ? " · " + deviceCard.modelData.address : "") + (deviceCard.modelData.batteryAvailable ? " · " + Math.round(deviceCard.modelData.battery * 100) + "% battery" : "")
                         }
                     }
                     MenuButton {

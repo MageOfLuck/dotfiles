@@ -5,7 +5,7 @@ import Quickshell.Wayland
 // A separate input-transparent surface reserves a fixed bar height. The menu
 // overlay can grow to screen height without changing the reserved space.
 PanelWindow {
-    visible: ControlState.reserveSpace && !Settings.menusOnly
+    visible: ControlState.reserveSpace
     anchors {
         top: true
         left: true

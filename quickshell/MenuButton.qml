@@ -64,9 +64,7 @@ Button {
     font.pixelSize: workspaceButton ? 12 : (iconButton ? Settings.barIconSize : 13)
     font.bold: true
     font.family: iconButton ? Settings.iconFontFamily : Settings.fontFamily
-    ToolTip.visible: hovered && hint.length > 0
-    ToolTip.delay: 650
-    ToolTip.text: hint
+    Accessible.name: hint || text
     contentItem: Item {
         id: content
         implicitWidth: button.iconButton

@@ -9,6 +9,7 @@ hl.monitor({
     scale    = "1",
     vrr      =  1,
     bitdepth = 10,
+    cm = "srgb",
 })
 hl.monitor({
     output   = "HDMI-A-1",
@@ -24,7 +25,7 @@ hl.monitor({
 })
 
 hl.monitor({
-    output   = "HDMI-A-3",
+    output   = "HDMI-A-2",
     mode     = "2560x1440@60",
     position = "320x1440",
     scale    = "1",
@@ -32,5 +33,5 @@ hl.monitor({
 
 hl.device({
     name = "huion-tablet_gt2401-pen",
-    output = "HDMI-A-3",
+    output = "HDMI-A-2",
 })

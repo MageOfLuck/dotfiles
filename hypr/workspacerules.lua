@@ -90,7 +90,7 @@ hl.workspace_rule({ workspace = "8", monitor = "DP-2",     persistent = true })
 hl.workspace_rule({ workspace = "9", monitor = "DP-2",     persistent = true })
 
 --Huion Tablet
-hl.workspace_rule({workspace = "10", monitor = "HDMI-A-3"})
+hl.workspace_rule({workspace = "10", monitor = "HDMI-A-2"})
 
 -- Layer rules also return a handle.
 -- local overlayLayerRule = hl.layer_rule({

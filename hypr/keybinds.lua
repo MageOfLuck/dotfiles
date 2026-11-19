@@ -2,13 +2,13 @@
 ---- KEYBINDINGS ----
 ---------------------
 
-local mainMod = "SUPER" -- Sets "Windows" key as main modifier
+local mainMod = "SUPER"
 local secMod = "ALT"
 local thirdMod = "CTRL"
 
 -- binds for applications
 hl.bind(mainMod .. " + T", hl.dsp.exec_cmd("wezterm"))
-hl.bind(mainMod .. " + E", hl.dsp.exec_cmd("sigma-file-manager"))
+hl.bind(mainMod .. " + E", hl.dsp.exec_cmd("QSG_RENDER_LOOP=basic index"))
 hl.bind(secMod .. " + V", hl.dsp.exec_cmd("vscodium"))
 hl.bind(secMod .. " + B", hl.dsp.exec_cmd("gtk-launch helium"))
 hl.bind(secMod .. " + D", hl.dsp.exec_cmd("discord"))
@@ -63,6 +63,7 @@ end
 --Contains keybinds to launch rivals submap
 hl.bind("XF86Launch7", hl.dsp.submap("gaming"))
 hl.bind("XF86Launch7", hl.dsp.exec_cmd("notify-send 'Rivals Mode' 'ON'"))
+hl.bind("XF86Launch7", hl.dsp.exec_cmd("pkill -f linux-wallpaperengine"))
 
 --submap implementation for Rivals (Frees Mouse Buttons)
 hl.define_submap("gaming", function()
@@ -72,6 +73,9 @@ hl.define_submap("gaming", function()
 
     hl.bind("XF86Launch7", hl.dsp.submap("reset"))
     hl.bind("XF86Launch7", hl.dsp.exec_cmd("notify-send 'Rivals Mode' 'OFF'"))
+    hl.bind("XF86Launch7", hl.dsp.exec_cmd("linux-wallpaperengine --screen-root DP-1 --bg 2877535436"))
+    hl.bind("XF86Launch7", hl.dsp.exec_cmd("linux-wallpaperengine --screen-root DP-2 --bg 1432750892"))
+    hl.bind("XF86Launch7", hl.dsp.exec_cmd("linux-wallpaperengine --screen-root HDMI-A-1 --bg 3676487777"))
 
     hl.bind(mainMod .. " + left",  hl.dsp.focus({ direction = "left" }))
     hl.bind(mainMod .. " + right", hl.dsp.focus({ direction = "right" }))

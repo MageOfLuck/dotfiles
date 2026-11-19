@@ -92,11 +92,6 @@ MenuView {
                     wrapMode: Text.WordWrap
                     Layout.fillWidth: true
                 }
-                Label {
-                    font.family: Settings.fontFamily
-                    color: Settings.muted
-                    text: "Load averages · " + (view.stats.load || "…")
-                }
             }
             SectionHeading { text: "Session & power" }
             MenuCard {

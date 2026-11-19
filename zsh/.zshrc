@@ -18,13 +18,13 @@ alias update='sudo pacman -Syu && paru -Sua'
 alias resync='sudo pacman -Syyu'
 alias install='sudo pacman -S'
 alias search='pacman -Ss'
+alias searchAUR='paru -Ss'
 alias remove='sudo pacman -R'
 alias removeAll='sudo pacman -Rns'
 alias listOrphans='pacman -Qdt'
 alias showNative='pacman -Qqn'
-alias showAUR='paru -Qqm'
+alias showAUR='pacman -Qqm'
 alias isInstalled='pacman -Qqs'
-alias bloodborne='./Applications/Bloodborne-bbport-x86_64.AppImage & disown'
 
 # better completion menu
 zstyle ':completion:*' menu select

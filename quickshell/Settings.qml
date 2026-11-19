@@ -10,7 +10,6 @@ QtObject {
     property color sectionSurface: "#302a3d"
     property color hoverSurface: "#423853"
     property color borderColor: "#4c435d"
-    property bool menusOnly: false
     property bool reserveSpace: false
     property string fontFamily: "Noto Sans"
     // Install a Nerd Font symbols font, or set this to an installed Nerd Font family.

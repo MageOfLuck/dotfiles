@@ -6,15 +6,6 @@ import Quickshell.Services.Pipewire
 ShellRoot {
     IpcHandler {
         target: "control"
-        function toggle(menu: string): void {
-            ControlState.toggle(menu, "", true);
-        }
-        function open(menu: string): void {
-            ControlState.open(menu, "", true);
-        }
-        function close(): void {
-            ControlState.close();
-        }
         function toggleReserve(): void {
             ControlState.reserveSpace = !ControlState.reserveSpace;
         }
@@ -28,10 +19,13 @@ ShellRoot {
         delegate: Scope {
             required property var modelData
             ScreenPanel {
+                id: strip
                 screen: modelData
             }
             MenuPanel {
                 screen: modelData
+                buttonCenter: strip.buttonCenter
+                barBottom: strip.barBottom
                 assignedScreenName: modelData.name
             }
             SpaceReservation {

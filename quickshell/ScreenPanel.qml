@@ -11,7 +11,13 @@ PanelWindow {
     id: panel
     property bool revealed: false
     readonly property bool menuOpen: ControlState.menu !== "" && ControlState.monitor === screen.name
-    readonly property bool showBar: !Settings.menusOnly && (ControlState.reserveSpace || revealed || menuOpen)
+    readonly property bool showBar: ControlState.reserveSpace || revealed || menuOpen
+    readonly property real barBottom: bar.y + bar.height
+    readonly property real buttonCenter: {
+        const buttons = { dashboard: dashboardButton, media: mediaButton, bluetooth: bluetoothButton, audio: audioButton, network: networkButton, notifications: notificationsButton, clock: clockButton }
+        const button = buttons[ControlState.menu]
+        return button ? button.parent.x + button.x + button.width / 2 : width / 2
+    }
     anchors {
         top: true
         left: true
@@ -39,12 +45,7 @@ PanelWindow {
     Timer {
         interval: Settings.revealDelay
         running: edgeHover.hovered && !panel.revealed && !panel.menuOpen
-        onTriggered: {
-            if (Settings.menusOnly)
-                ControlState.open("audio", panel.screen.name, false);
-            else
-                panel.revealed = true;
-        }
+        onTriggered: panel.revealed = true
     }
     Timer {
         interval: Settings.hideDelay
@@ -86,11 +87,12 @@ PanelWindow {
             }
             spacing: 6
             MenuButton {
+                id: dashboardButton
                 iconButton: true
                 text: String.fromCodePoint(0xF0493) // nf-md-cog (monochrome System icon)
                 hint: "System"
                 selected: panel.menuOpen && ControlState.menu === "dashboard"
-                onClicked: ControlState.toggle("dashboard", panel.screen.name, false)
+                onClicked: ControlState.toggle("dashboard", panel.screen.name)
             }
             RowLayout {
                 spacing: 4
@@ -105,18 +107,17 @@ PanelWindow {
                         // Activate through Quickshell's Hyprland IPC rather than
                         // launching a separate shell and hyprctl process.
                         onClicked: modelData.activate()
-                        ToolTip.visible: hovered
-                        ToolTip.delay: 600
-                        ToolTip.text: "Switch to workspace " + modelData.name
+                        hint: "Switch to workspace " + modelData.name
                     }
                 }
             }
             MenuButton {
+                id: mediaButton
                 iconButton: true
                 selected: panel.menuOpen && ControlState.menu === "media"
                 text: String.fromCodePoint(0xF0387) // nf-md-music_note
                 hint: Mpris.players.values.length ? (Mpris.players.values[0].trackTitle || "Media") : "Media"
-                onClicked: ControlState.toggle("media", panel.screen.name, false)
+                onClicked: ControlState.toggle("media", panel.screen.name)
             }
         }
         Text {
@@ -139,13 +140,15 @@ PanelWindow {
             }
             spacing: 6
             MenuButton {
+                id: bluetoothButton
                 iconButton: true
                 text: String.fromCodePoint(0xF00AF) // nf-md-bluetooth
                 hint: "Bluetooth"
                 selected: panel.menuOpen && ControlState.menu === "bluetooth"
-                onClicked: ControlState.toggle("bluetooth", panel.screen.name, false)
+                onClicked: ControlState.toggle("bluetooth", panel.screen.name)
             }
             MenuButton {
+                id: audioButton
                 iconButton: true
                 audioAccent: true
                 selected: panel.menuOpen && ControlState.menu === "audio"
@@ -159,14 +162,15 @@ PanelWindow {
                 hint: Pipewire.defaultAudioSink && Pipewire.defaultAudioSink.audio
                       ? (Pipewire.defaultAudioSink.audio.muted ? "Audio muted" : "Audio · " + Math.round(Pipewire.defaultAudioSink.audio.volume * 100) + "%")
                       : "Audio"
-                onClicked: ControlState.toggle("audio", panel.screen.name, false)
+                onClicked: ControlState.toggle("audio", panel.screen.name)
             }
             MenuButton {
+                id: networkButton
                 iconButton: true
                 text: String.fromCodePoint(0xF05A9) // nf-md-wifi
                 hint: "Network"
                 selected: panel.menuOpen && ControlState.menu === "network"
-                onClicked: ControlState.toggle("network", panel.screen.name, false)
+                onClicked: ControlState.toggle("network", panel.screen.name)
             }
             Rectangle {
                 width: 1
@@ -175,16 +179,18 @@ PanelWindow {
                 opacity: 0.5
             }
             MenuButton {
+                id: notificationsButton
                 iconButton: true
                 text: ControlState.dnd ? String.fromCodePoint(0xF009B) : String.fromCodePoint(0xF009C) // nf-md-bell_off / nf-md-bell_outline
                 hint: ControlState.dnd ? "Notifications · Do Not Disturb" : "Notifications"
                 selected: panel.menuOpen && ControlState.menu === "notifications"
-                onClicked: ControlState.toggle("notifications", panel.screen.name, false)
+                onClicked: ControlState.toggle("notifications", panel.screen.name)
             }
             MenuButton {
+                id: clockButton
                 text: Qt.formatDateTime(clock.date, "dddd h:mm AP")
                 selected: panel.menuOpen && ControlState.menu === "clock"
-                onClicked: ControlState.toggle("clock", panel.screen.name, false)
+                onClicked: ControlState.toggle("clock", panel.screen.name)
             }
         }
         SystemClock {

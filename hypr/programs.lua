@@ -20,6 +20,7 @@ hl.on("hyprland.start", function ()
   hl.exec_cmd('qs')
   hl.exec_cmd("vicinae server")
   hl.exec_cmd("gtk-launch helium")
+  hl.exec_cmd("cachyos-pi")
   hl.exec_cmd("overlayed")
 end)
 

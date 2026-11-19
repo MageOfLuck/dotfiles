@@ -83,7 +83,7 @@ Scope {
         if (defaultAction) {
             defaultAction.invoke();
         } else {
-            ControlState.open("notifications", monitorName || Settings.popupMonitor, false);
+            ControlState.open("notifications", monitorName || Settings.popupMonitor);
         }
     }
     function dismiss(id) {

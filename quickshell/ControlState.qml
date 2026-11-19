@@ -11,7 +11,7 @@ QtObject {
     property bool reserveSpace: Settings.reserveSpace
     property var notificationHub: null
     property var panels: ["audio", "bluetooth", "network", "notifications", "clock", "dashboard", "media"]
-    function open(name, screenName, pin) {
+    function open(name, screenName) {
         if (panels.indexOf(name) < 0)
             return;
         monitor = screenName || (Hyprland.focusedMonitor ? Hyprland.focusedMonitor.name : "");
@@ -19,12 +19,12 @@ QtObject {
             monitor = Quickshell.screens[0].name;
         menu = name;
     }
-    function toggle(name, screenName, pin) {
+    function toggle(name, screenName) {
         const target = screenName || (Hyprland.focusedMonitor ? Hyprland.focusedMonitor.name : "");
         if (menu === name && monitor === target)
             close();
         else
-            open(name, target, pin);
+            open(name, target);
     }
     function close() {
         menu = "";
