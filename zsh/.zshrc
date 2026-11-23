@@ -14,17 +14,11 @@ setopt SHARE_HISTORY
 
 eval "$(starship init zsh)"
 
-alias update='sudo pacman -Syu && paru -Sua'
-alias resync='sudo pacman -Syyu'
-alias install='sudo pacman -S'
-alias search='pacman -Ss'
-alias searchAUR='paru -Ss'
-alias remove='sudo pacman -R'
 alias removeAll='sudo pacman -Rns'
 alias listOrphans='pacman -Qdt'
 alias showNative='pacman -Qqn'
 alias showAUR='pacman -Qqm'
-alias isInstalled='pacman -Qqs'
+alias cleanCache='sudo pacman -Sc'
 
 # better completion menu
 zstyle ':completion:*' menu select

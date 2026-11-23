@@ -21,8 +21,12 @@ ShellRoot {
             ScreenPanel {
                 id: strip
                 screen: modelData
+                retracting: menuPanel.visible
+                displayedMenu: menuPanel.displayedMenu
             }
             MenuPanel {
+                id: menuPanel
+                barHovered: strip.barHovered
                 screen: modelData
                 buttonCenter: strip.buttonCenter
                 barBottom: strip.barBottom

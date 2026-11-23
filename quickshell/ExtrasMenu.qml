@@ -32,17 +32,17 @@ MenuView {
             }
         }
     }
-    Component.onCompleted: if (ControlState.menu === "dashboard") statsProcess.running = true
+    Component.onCompleted: if (displayedSection === "dashboard") statsProcess.running = true
     Timer {
         interval: 3000
         repeat: true
-        running: ControlState.menu === "dashboard"
+        running: displayedSection === "dashboard"
         onTriggered: if (!statsProcess.running) statsProcess.running = true
     }
     Timer {
         interval: 1000
         repeat: true
-        running: ControlState.menu === "media" && !!view.player && view.player.isPlaying && view.player.positionSupported
+        running: displayedSection === "media" && !!view.player && view.player.isPlaying && view.player.positionSupported
         onTriggered: if (view.player) view.player.positionChanged()
     }
     ColumnLayout {
@@ -50,7 +50,7 @@ MenuView {
         width: view.availableWidth
         spacing: 12
         ColumnLayout {
-            visible: ControlState.menu === "dashboard"
+            visible: displayedSection === "dashboard"
             Layout.fillWidth: true
             spacing: 12
             SectionHeading { text: "Bar settings" }
@@ -145,7 +145,7 @@ MenuView {
             }
         }
         ColumnLayout {
-            visible: ControlState.menu === "media"
+            visible: displayedSection === "media"
             Layout.fillWidth: true
             spacing: 12
             SectionHeading { text: "Player" }
@@ -232,7 +232,7 @@ MenuView {
             }
         }
         ColumnLayout {
-            visible: ControlState.menu === "clock"
+            visible: displayedSection === "clock"
             Layout.fillWidth: true
             spacing: 12
             MenuCard {

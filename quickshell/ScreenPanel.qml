@@ -9,13 +9,16 @@ import Quickshell.Services.Pipewire
 
 PanelWindow {
     id: panel
+    readonly property bool barHovered: barHover.hovered
+    property string displayedMenu: ""
+    property bool retracting: false
     property bool revealed: false
     readonly property bool menuOpen: ControlState.menu !== "" && ControlState.monitor === screen.name
-    readonly property bool showBar: ControlState.reserveSpace || revealed || menuOpen
+    readonly property bool showBar: ControlState.reserveSpace || revealed || menuOpen || retracting
     readonly property real barBottom: bar.y + bar.height
     readonly property real buttonCenter: {
         const buttons = { dashboard: dashboardButton, media: mediaButton, bluetooth: bluetoothButton, audio: audioButton, network: networkButton, notifications: notificationsButton, clock: clockButton }
-        const button = buttons[ControlState.menu]
+        const button = buttons[displayedMenu]
         return button ? button.parent.x + button.x + button.width / 2 : width / 2
     }
     anchors {
@@ -92,7 +95,9 @@ PanelWindow {
                 text: String.fromCodePoint(0xF0493) // nf-md-cog (monochrome System icon)
                 hint: "System"
                 selected: panel.menuOpen && ControlState.menu === "dashboard"
-                onClicked: ControlState.toggle("dashboard", panel.screen.name)
+                hoverMenu: "dashboard"
+                menuScreen: panel.screen.name
+                onClicked: ControlState.open(hoverMenu, menuScreen)
             }
             RowLayout {
                 spacing: 4
@@ -117,7 +122,9 @@ PanelWindow {
                 selected: panel.menuOpen && ControlState.menu === "media"
                 text: String.fromCodePoint(0xF0387) // nf-md-music_note
                 hint: Mpris.players.values.length ? (Mpris.players.values[0].trackTitle || "Media") : "Media"
-                onClicked: ControlState.toggle("media", panel.screen.name)
+                hoverMenu: "media"
+                menuScreen: panel.screen.name
+                onClicked: ControlState.open(hoverMenu, menuScreen)
             }
         }
         Text {
@@ -145,7 +152,9 @@ PanelWindow {
                 text: String.fromCodePoint(0xF00AF) // nf-md-bluetooth
                 hint: "Bluetooth"
                 selected: panel.menuOpen && ControlState.menu === "bluetooth"
-                onClicked: ControlState.toggle("bluetooth", panel.screen.name)
+                hoverMenu: "bluetooth"
+                menuScreen: panel.screen.name
+                onClicked: ControlState.open(hoverMenu, menuScreen)
             }
             MenuButton {
                 id: audioButton
@@ -162,7 +171,9 @@ PanelWindow {
                 hint: Pipewire.defaultAudioSink && Pipewire.defaultAudioSink.audio
                       ? (Pipewire.defaultAudioSink.audio.muted ? "Audio muted" : "Audio · " + Math.round(Pipewire.defaultAudioSink.audio.volume * 100) + "%")
                       : "Audio"
-                onClicked: ControlState.toggle("audio", panel.screen.name)
+                hoverMenu: "audio"
+                menuScreen: panel.screen.name
+                onClicked: ControlState.open(hoverMenu, menuScreen)
             }
             MenuButton {
                 id: networkButton
@@ -170,7 +181,9 @@ PanelWindow {
                 text: String.fromCodePoint(0xF05A9) // nf-md-wifi
                 hint: "Network"
                 selected: panel.menuOpen && ControlState.menu === "network"
-                onClicked: ControlState.toggle("network", panel.screen.name)
+                hoverMenu: "network"
+                menuScreen: panel.screen.name
+                onClicked: ControlState.open(hoverMenu, menuScreen)
             }
             Rectangle {
                 width: 1
@@ -184,13 +197,17 @@ PanelWindow {
                 text: ControlState.dnd ? String.fromCodePoint(0xF009B) : String.fromCodePoint(0xF009C) // nf-md-bell_off / nf-md-bell_outline
                 hint: ControlState.dnd ? "Notifications · Do Not Disturb" : "Notifications"
                 selected: panel.menuOpen && ControlState.menu === "notifications"
-                onClicked: ControlState.toggle("notifications", panel.screen.name)
+                hoverMenu: "notifications"
+                menuScreen: panel.screen.name
+                onClicked: ControlState.open(hoverMenu, menuScreen)
             }
             MenuButton {
                 id: clockButton
                 text: Qt.formatDateTime(clock.date, "dddd h:mm AP")
                 selected: panel.menuOpen && ControlState.menu === "clock"
-                onClicked: ControlState.toggle("clock", panel.screen.name)
+                hoverMenu: "clock"
+                menuScreen: panel.screen.name
+                onClicked: ControlState.open(hoverMenu, menuScreen)
             }
         }
         SystemClock {

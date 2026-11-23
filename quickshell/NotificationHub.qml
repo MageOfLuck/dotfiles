@@ -13,14 +13,33 @@ Scope {
 
     // Toast state is separate from notification history. Hiding a toast should
     // never dismiss an actionable notification from the notification server.
+    function sourceLine(n) {
+        if (!n) return "Application";
+        const app = n.appName || "Application";
+        const hints = n.hints || {};
+        const parts = [app];
+        const summary = n.summary || "";
+        // Discord clients commonly include the room in the notification title.
+        // Keep that title verbatim and add distinct, human-readable hints only.
+        for (const key of ["server-name", "channel-name", "conversation-name",
+                           "x-kde-origin-name", "subtitle"]) {
+            const value = hints[key];
+            if (typeof value !== "string") continue;
+            const label = value.trim();
+            if (label && !parts.includes(label) && !summary.includes(label))
+                parts.push(label);
+        }
+        return parts.join(" · ");
+    }
     function hidePopup(id) {
         popups = popups.filter(p => p.id !== id);
     }
     function showPopup(n) {
         if (maxVisible === 0 || ControlState.dnd) return;
         const next = popups.filter(p => p.id !== n.id);
-        next.push({
+        next.unshift({
             id: n.id,
+            notification: n,
             summary: n.summary || "Notification",
             body: n.body || "",
             appName: n.appName || "Application",
@@ -29,7 +48,7 @@ Scope {
             hasDefault: !!findAction(n, "default"),
             paused: false
         });
-        popups = next.slice(-maxVisible);
+        popups = next.slice(0, maxVisible);
     }
     function pausePopup(id, pause) {
         // Mutate the toast timer only; replacing the Repeater's array here would
@@ -95,7 +114,7 @@ Scope {
         popups = [];
         server.trackedNotifications.values.slice().forEach(n => n.dismiss());
     }
-    onMaxVisibleChanged: popups = maxVisible > 0 ? popups.slice(-maxVisible) : []
+    onMaxVisibleChanged: popups = popups.slice(0, maxVisible)
     Connections {
         target: ControlState
         function onDndChanged() { if (ControlState.dnd) hub.popups = []; }
@@ -105,6 +124,7 @@ Scope {
 
     NotificationServer {
         id: server
+        imageSupported: true
         actionsSupported: true
         persistenceSupported: true
         bodyMarkupSupported: false

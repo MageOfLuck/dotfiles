@@ -19,3 +19,4 @@ SleekTextField 1.0 SleekTextField.qml
 SleekSlider 1.0 SleekSlider.qml
 SectionHeading 1.0 SectionHeading.qml
 MenuCard 1.0 MenuCard.qml
+NotificationArtwork 1.0 NotificationArtwork.qml

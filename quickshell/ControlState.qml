@@ -7,6 +7,7 @@ QtObject {
     id: root
     property string menu: ""
     property string monitor: ""
+    property bool popupHovered: false
     property bool dnd: false
     property bool reserveSpace: Settings.reserveSpace
     property var notificationHub: null

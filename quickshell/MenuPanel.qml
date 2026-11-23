@@ -13,7 +13,17 @@ PanelWindow {
     required property real barBottom
     required property real buttonCenter
     readonly property color menuSurface: Qt.rgba(Settings.surface.r, Settings.surface.g, Settings.surface.b, 0.98)
-    visible: panel.isShown
+    required property bool barHovered
+    property bool entered: false
+    property string displayedMenu: ""
+    readonly property bool pointerInside: barHovered || menuHover.hovered || ControlState.popupHovered
+    onPointerInsideChanged: if (isShown && pointerInside) entered = true
+    Timer {
+        interval: Settings.menuLeaveDelay
+        running: panel.isShown && panel.entered && !panel.pointerInside
+        onTriggered: ControlState.close()
+    }
+    visible: panel.isShown || reveal.progress > 0
     anchors {
         top: true
         bottom: true
@@ -29,7 +39,7 @@ PanelWindow {
     mask: Region {
         x: 0
         y: panel.barBottom
-        width: panel.width
+        width: panel.isShown ? panel.width : 0
         height: panel.height - panel.barBottom
     }
     MouseArea {
@@ -84,23 +94,35 @@ PanelWindow {
                 media: 550
             })
         // Extend menus downward, but always stop above the monitor's bottom edge.
-        readonly property real fullHeight: Math.max(0, Math.min(panel.height - y - 12, menuHeights[ControlState.menu] || 520))
+        readonly property real fullHeight: Math.max(0, Math.min(panel.height - y - 12, menuHeights[panel.displayedMenu] || 520))
         x: Math.max(0, Math.min(panel.width - width, panel.buttonCenter - width / 2))
         y: panel.barBottom
         height: fullHeight * progress
         clip: true
-        property real progress: 1
+        HoverHandler { id: menuHover }
+        property real progress: 0
         NumberAnimation {
-            id: expand
+            id: slide
             target: reveal
             property: "progress"
-            from: 0
-            to: 1
             duration: Settings.animationDuration
-            easing.type: Easing.OutCubic
         }
         readonly property string activeMenu: panel.isShown ? ControlState.menu : ""
-        onActiveMenuChanged: if (activeMenu) expand.restart()
+        onActiveMenuChanged: {
+            const switching = activeMenu !== "" && reveal.progress > 0
+                              && panel.displayedMenu !== activeMenu
+            slide.stop()
+            if (activeMenu) {
+                reveal.progress = 0
+                panel.displayedMenu = activeMenu
+                panel.entered = panel.pointerInside
+            }
+            slide.to = activeMenu ? 1 : 0
+            slide.from = reveal.progress
+            slide.easing.type = switching ? Easing.InOutSine
+                              : activeMenu ? Easing.OutCubic : Easing.InCubic
+            slide.start()
+        }
         Rectangle {
             width: parent.width
             height: reveal.fullHeight
@@ -123,7 +145,7 @@ PanelWindow {
                     Layout.fillWidth: true
                     Label {
                         font.family: Settings.fontFamily
-                        text: ControlState.menu === "dashboard" ? "System" : ControlState.menu.charAt(0).toUpperCase() + ControlState.menu.slice(1)
+                        text: panel.displayedMenu === "dashboard" ? "System" : panel.displayedMenu.charAt(0).toUpperCase() + panel.displayedMenu.slice(1)
                         color: Settings.foreground
                         font.pixelSize: 19
                         font.bold: true
@@ -144,8 +166,9 @@ PanelWindow {
                 Loader {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    active: panel.isShown
-                    source: ControlState.menu === "audio" ? "AudioMenu.qml" : ControlState.menu === "bluetooth" ? "BluetoothMenu.qml" : ControlState.menu === "network" ? "NetworkMenu.qml" : ControlState.menu === "notifications" ? "NotificationMenu.qml" : "ExtrasMenu.qml"
+                    active: panel.visible
+                    property string displayedSection: panel.displayedMenu
+                    source: panel.displayedMenu === "audio" ? "AudioMenu.qml" : panel.displayedMenu === "bluetooth" ? "BluetoothMenu.qml" : panel.displayedMenu === "network" ? "NetworkMenu.qml" : panel.displayedMenu === "notifications" ? "NotificationMenu.qml" : "ExtrasMenu.qml"
                 }
             }
         }

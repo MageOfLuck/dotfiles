@@ -56,8 +56,10 @@ MenuView {
                         spacing: 6
                         RowLayout {
                             Layout.fillWidth: true
+                            NotificationArtwork { notification: itemCard.modelData }
                             Label {
-                                text: itemCard.modelData.appName || "Application"
+                                text: view.hub.sourceLine(itemCard.modelData)
+                                textFormat: Text.PlainText
                                 font.family: Settings.fontFamily
                                 color: Settings.muted
                                 font.bold: true

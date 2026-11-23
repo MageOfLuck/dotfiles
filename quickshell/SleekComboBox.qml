@@ -71,6 +71,10 @@ ComboBox {
         implicitHeight: Math.min(list.contentHeight + 12, 280)
         contentItem: ListView {
             id: list
+            HoverHandler {
+                onHoveredChanged: ControlState.popupHovered = hovered
+                Component.onDestruction: if (hovered) ControlState.popupHovered = false
+            }
             clip: true
             model: control.popup.visible ? control.delegateModel : null
             currentIndex: control.highlightedIndex

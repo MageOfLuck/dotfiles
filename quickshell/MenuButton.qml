@@ -3,6 +3,14 @@ import QtQuick.Controls
 
 Button {
     id: button
+    property string hoverMenu: ""
+    property string menuScreen: ""
+    hoverEnabled: true
+    Timer {
+        interval: Settings.menuHoverDelay
+        running: button.hoverMenu !== "" && button.hovered
+        onTriggered: ControlState.open(button.hoverMenu, button.menuScreen)
+    }
     property bool selected: false
     property bool audioAccent: false
     property bool compact: false

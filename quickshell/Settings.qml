@@ -2,7 +2,7 @@ pragma Singleton
 import QtQuick
 
 QtObject {
-    property color surface: "#241f31"
+    property color surface: '#241f31'
     property color elevated: "#575fbf"
     property color purple: '#7668c5'
     property color foreground: "#f0edf8"
@@ -16,8 +16,10 @@ QtObject {
     property string iconFontFamily: "Symbols Nerd Font Mono"
     property int barIconSize: 19
     property int edgeHeight: 8
-    property int animationDuration: 270
+    property int animationDuration: 400
     property int revealDelay: 80
+    property int menuHoverDelay: 120
+    property int menuLeaveDelay: 160
     property int hideDelay: 200
     property int barHeight: 42
     property string popupMonitor: "DP-1"

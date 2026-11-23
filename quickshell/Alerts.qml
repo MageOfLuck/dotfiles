@@ -76,9 +76,11 @@ Scope {
                             RowLayout {
                                 Layout.fillWidth: true
                                 spacing: 8
+                                NotificationArtwork { notification: toast.modelData.notification }
                                 Label {
                                     font.family: Settings.fontFamily
-                                    text: toast.modelData.appName
+                                    text: root.hub.sourceLine(toast.modelData.notification)
+                                    textFormat: Text.PlainText
                                     color: Settings.muted
                                     font.pixelSize: 11
                                     font.bold: true

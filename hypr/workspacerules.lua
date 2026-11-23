@@ -36,7 +36,7 @@ hl.window_rule({
     match = {
         class = "com.github.wwmm.easyeffects|discord|steam",
     },
-    opacity = "1.0 override 0.67 override 1.0 override",
+    opacity = "1.0 override 0.5 override 1.0 override",
     no_blur = false,
 })
 
