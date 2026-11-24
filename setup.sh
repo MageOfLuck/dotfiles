@@ -1,88 +1,112 @@
 #!/usr/bin/env bash
-#
-#
-# Optional extras (auto-detected if present next to this script):
-#   pkglist.txt   - extra official-repo packages, one per line
-#   aurpacks.txt  - extra AUR packages, one per line
+set -e
 
-set -euo pipefail
+info() { printf '%s\n' "$*"; }
+warn() { printf 'Warning: %s\n' "$*" >&2; }
+die() { printf 'Error: %s\n' "$*" >&2; exit 1; }
 
-# ================================================================
-# Helpers
-# ================================================================
-info()  { echo -e "\e[1;34m[*]\e[0m $*"; }
-ok()    { echo -e "\e[1;32m[✓]\e[0m $*"; }
-warn()  { echo -e "\e[1;33m[!]\e[0m $*"; }
-
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-
-# ================================================================
-# 1. Full system update
-# ================================================================
-info "Syncing and updating system..."
-sudo pacman -Syyu --noconfirm
-ok "System up to date."
-
-# ================================================================
-# 1. AUR helper
-# ================================================================
-AUR_HELPER=""
-if command -v paru &>/dev/null; then
-    AUR_HELPER="paru"
-    ok "paru already present."
-else
-    info "Installing paru (AUR helper)..."
-    sudo pacman -S --needed --noconfirm base-devel git
-    git clone https://aur.archlinux.org/paru.git /tmp/paru-build
-    (cd /tmp/paru-build && makepkg -si --noconfirm)
-    rm -rf /tmp/paru-build
-    AUR_HELPER="paru"
-    ok "paru installed."
+if [[ ${1-} == --help || ${1-} == -h ]]; then
+    printf 'Usage: %s\n' "${0##*/}"
+    printf '%s\n' \
+        'Restore packages from pkglist.txt and aurpacks.txt next to this script.' \
+        'Move visible sibling folders into ~/.dotfiles if that directory does not exist.' \
+        'Skip the move when this script is already in a .dotfiles directory.'
+    exit 0
 fi
 
-# ================================================================
-# 2. Optional extra packages from pkglist.txt / aurpacks.txt
-#     (drop these next to the script if you keep a running list)
-# ================================================================
-if [[ -f "$SCRIPT_DIR/pkglist.txt" ]]; then
-    info "Installing extra official-repo packages from pkglist.txt..."
-    sudo pacman -S --needed - < "$SCRIPT_DIR/pkglist.txt"
-    ok "pkglist.txt packages installed."
-fi
+(( $# == 0 )) || die "Run this script without folder arguments. Use --help for details."
+(( EUID != 0 )) || die "Run this as your normal user. The script calls sudo for pacman."
+command -v pacman >/dev/null || die "This script requires pacman."
+command -v sudo >/dev/null || die "This script requires sudo."
 
-if [[ -f "$SCRIPT_DIR/aurpacks.txt" ]]; then
-    info "Installing extra AUR packages from aurpacks.txt..."
-    "$AUR_HELPER" -S --needed - < "$SCRIPT_DIR/aurpacks.txt"
-    ok "aurpacks.txt packages installed."
-fi
+script_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)
+dotfiles_dir="${HOME:?Set HOME before running this script}/.dotfiles"
 
-# ================================================================
-# 3. Shell — set zsh as default
-# ================================================================
-if [[ "$SHELL" != *zsh ]]; then
-    info "Setting zsh as your default shell (you'll be prompted for your password)..."
-    chsh -s "$(command -v zsh)"
-    ok "Default shell changed to zsh (takes effect next login)."
-else
-    ok "zsh already default."
-fi
+read_package_list() {
+    local file=$1 line
+    local -n packages=$2
+    local package_pattern='^[[:space:]]*([[:alnum:]_@+][[:alnum:]_@.+-]*)[[:space:]]*$'
 
-# ================================================================
-# 4. Dotfiles — clone
-# ================================================================
-DOTFILES_DIR="$HOME/.dotfiles"
-if [[ ! -d "$DOTFILES_DIR" ]]; then
-    info "Moving dotfiles folders to $DOTFILES_DIR..."
-    mkdir -p "$DOTFILES_DIR"
-    shopt -s nullglob
-    for dir in */; do
-        mv "$dir" "$DOTFILES_DIR/"
+    if [[ ! -e $file ]]; then
+        warn "Missing $file. Skipping that package list."
+        return
+    fi
+    [[ -f $file && -r $file ]] || die "Cannot read package list $file."
+    while IFS= read -r line || [[ -n $line ]]; do
+        line=${line%%#*}
+        [[ $line =~ ^[[:space:]]*$ ]] && continue
+        [[ $line =~ $package_pattern ]] || die "Invalid package entry in $file: $line"
+        packages+=("${BASH_REMATCH[1]}")
+    done < "$file"
+}
+
+repo_packages=()
+aur_packages=()
+read_package_list "$script_dir/pkglist.txt" repo_packages
+read_package_list "$script_dir/aurpacks.txt" aur_packages
+(( ${#repo_packages[@]} + ${#aur_packages[@]} > 0 )) ||
+    die "No packages were listed. Put pkglist.txt or aurpacks.txt next to this script."
+
+info "Updating the system..."
+sudo pacman -Syu --noconfirm
+
+if (( ${#repo_packages[@]} > 0 )); then
+    info "Checking pkglist.txt against the enabled repositories..."
+    available_packages=$(pacman -Slq)
+    [[ -n $available_packages ]] || die "pacman returned an empty repository package list."
+    declare -A available=()
+    while IFS= read -r package; do
+        [[ -n $package ]] && available["$package"]=1
+    done <<< "$available_packages"
+
+    repo_targets=()
+    for package in "${repo_packages[@]}"; do
+        if [[ ${available[$package]+found} ]]; then
+            repo_targets+=("$package")
+        else
+            warn "Unavailable in the enabled repositories, skipping: $package"
+        fi
     done
-    shopt -u nullglob
-    ok "Moved folders to $DOTFILES_DIR."
-else
-    warn "$DOTFILES_DIR already exists, skipping move."
+    if (( ${#repo_targets[@]} > 0 )); then
+        info "Installing repository packages..."
+        sudo pacman -S --needed -- "${repo_targets[@]}"
+    fi
 fi
 
-echo
-ok "Rebuild complete.
+if (( ${#aur_packages[@]} > 0 )); then
+    if ! command -v paru >/dev/null; then
+        info "Installing paru from the enabled repositories..."
+        sudo pacman -S --needed -- paru ||
+            die "Could not install paru. Check the pacman output and your CachyOS repositories."
+    fi
+    info "Installing AUR packages..."
+    paru -S --needed "${aur_packages[@]}"
+fi
+
+if zsh_path=$(command -v zsh); then
+    passwd_entry=$(getent passwd "$EUID")
+    if [[ ! ${passwd_entry##*:} -ef $zsh_path ]]; then
+        info "Changing your login shell to $zsh_path..."
+        chsh -s "$zsh_path"
+    fi
+else
+    warn "zsh is unavailable. Your login shell was left as-is."
+fi
+
+if [[ ${script_dir##*/} == .dotfiles || $script_dir -ef $dotfiles_dir ]]; then
+    info "Already in $script_dir. Skipping the folder move."
+elif [[ -d $dotfiles_dir ]]; then
+    info "Already have $dotfiles_dir. Skipping the folder move."
+else
+    mkdir -- "$dotfiles_dir"
+    shopt -s nullglob
+    for folder in "$script_dir"/*/; do
+        folder=${folder%/}
+        target_dir="$dotfiles_dir/${folder##*/}"
+        mv -nT -- "$folder" "$target_dir"
+        [[ ! -e $folder && ! -L $folder ]] ||
+            die "Could not move $folder. Check $target_dir."
+    done
+fi
+
+info "Rebuild complete."
