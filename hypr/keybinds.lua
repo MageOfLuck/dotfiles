@@ -8,7 +8,7 @@ local thirdMod = "CTRL"
 
 -- binds for applications
 hl.bind(mainMod .. " + T", hl.dsp.exec_cmd("wezterm"))
-hl.bind(mainMod .. " + E", hl.dsp.exec_cmd("QSG_RENDER_LOOP=basic index"))
+hl.bind(mainMod .. " + E", hl.dsp.exec_cmd("cosmic-files"))
 hl.bind(secMod .. " + V", hl.dsp.exec_cmd("vscodium"))
 hl.bind(secMod .. " + B", hl.dsp.exec_cmd("gtk-launch helium"))
 hl.bind(secMod .. " + D", hl.dsp.exec_cmd("discord"))
@@ -17,8 +17,7 @@ hl.bind(secMod .. " + E", hl.dsp.exec_cmd("easyeffects"))
 hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd("vicinae toggle"))
 
 hl.bind(mainMod .. " + Escape", hl.dsp.exec_cmd("lact"))
--- Overlayed: other option toggle-pin
-hl.bind("XF86Launch5", hl.dsp.exec_cmd("python3 ~/.local/bin/overlayed-control settings"))
+hl.bind("XF86Launch5", hl.dsp.exec_cmd("python3 ~/.local/bin/overlayed-control settings")) -- Overlayed: other option toggle-pin
 
 --(found using wev in case I need this later)
 hl.bind("XF86Tools", hl.dsp.exec_cmd("/usr/bin/euro-office-euro-office"))

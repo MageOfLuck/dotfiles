@@ -1,11 +1,13 @@
-ashell-bin
+balena-etcher
 libcava
 linux-wallpaperengine-git
 lorien-bin
+matlab-mpm
 minecraft-launcher
-overlayed-git
+processing
 qt6-m3shapes-git
-themechanger-git
+quickshell-git
 ttf-rubik-vf
+vencord-installer
 vicinae-bin
 win11fonts-auto

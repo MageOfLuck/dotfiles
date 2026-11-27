@@ -33,7 +33,6 @@ end)
 hl.env("JAVA_HOME", "~/jdk-26.0.2.1")
 hl.env("XDG_DATA_DIRS", "/usr/share:/usr/local/share:$XDG_DATA_DIRS")
 hl.env("WLR_DRM_NO_ATOMIC", "0")
---hl.env("__NV_PRIME_RENDER_OFFLOAD", "1")
 hl.env("MOZ_DISABLE_RDD_SANDBOX", "1")
 hl.env("XDG_DATA_DIRS", os.getenv("HOME") .. "/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share")
 
@@ -47,6 +46,7 @@ hl.env("WLR_NO_HARDWARE_CURSORS", "1")
 hl.env("QT_AUTO_SCREEN_SCALE_FACTOR", "1")
 hl.env("QT_QPA_PLATFORMTHEME", "qt6ct")
 hl.env("GTK_THEME", "Dracula")
+hl.env("GDK_WAYLAND_DISABLE", "ext_background_effect_manager_v1")
 
 -----------------------
 ----- PERMISSIONS -----

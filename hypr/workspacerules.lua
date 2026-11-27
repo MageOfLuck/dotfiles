@@ -31,46 +31,24 @@ hl.window_rule({
     no_focus = true,
 })
 
+-- Applications that are normally used together i.e. productivity
 hl.window_rule({
-    name = "Opacity-Settings",
+    name = "Inactive Opacity Alternative",
     match = {
-        class = "com.github.wwmm.easyeffects|discord|steam",
+        class = "helium|codium|com.system76.CosmicFiles",
     },
-    opacity = "1.0 override 0.5 override 1.0 override",
-    no_blur = false,
+    opacity = "1.0 override 0.82 override 1.0 override",
 })
 
--- Overlayed: Discord voice chat overlay
+-- Wezterm has its own opacity functionality
 hl.window_rule({
-    name = "overlayed-main",
+    name = "Inactive Opacity Exceptions",
     match = {
-        initial_title = "^Overlayed - Main$",
+        class = "org.wezfurlong.wezterm",
     },
-
-    float = true,
-    pin = true,
-
-    -- Position on your primary monitor
-    monitor = "DP-1",
-
-    -- Compact overlay size
-    size = {250,300},
-
-    -- Top-right corner, 16px margin
-    move = {
-        "(monitor_w-window_w-6)",
-        "50",
-    },
-
-    -- Avoid Hyprland visual effects
-    no_blur = true,
-    no_shadow = true,
-    no_anim = true,
-    border_size = 0,
-
-    -- Preserve application transparency
     opacity = "1.0 override 1.0 override 1.0 override",
 })
+
 -------------------------
 ---- WORKSPACE GROUPS ----
 -------------------------
